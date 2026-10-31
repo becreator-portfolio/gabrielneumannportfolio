@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Split } from "./Split";
 import { navLinks as nav, site } from "@/content/site";
 
 export function Footer() {
@@ -11,14 +12,13 @@ export function Footer() {
           </Link>
         ))}
       </nav>
-      <p className="footer__name" aria-hidden="true">
-        Neumann
+      <p className="footer__name" aria-hidden="true" data-reveal="split">
+        <Split text="Neumann" by="char" />
       </p>
       <div className="footer__row label">
         <span>
           © {new Date().getFullYear()} {site.name}
         </span>
-        <span>{site.role}</span>
         <a href="#conteudo" className="roll" data-text="Voltar ao topo ↑">
           <span>Voltar ao topo ↑</span>
         </a>

@@ -43,6 +43,14 @@ botão do topo, chamada no fim dos projetos) — assim não há link sem destino
 Ao preencher qualquer campo (e-mail, Instagram, WhatsApp, Behance, LinkedIn),
 tudo isso aparece automaticamente.
 
+## Tipografia
+
+- **Archivo** (variável, eixo de largura) em três larguras: 62% para nomes e
+  títulos, 100% para texto de interface, 116% para rótulos.
+- **Newsreader** (variável, tamanho óptico) para a voz editorial: frase de
+  apresentação, resumos, textos dos projetos e Sobre.
+- Escala em quarta perfeita sobre 17px; tokens `--fs-*` em `app/globals.css`.
+
 ## Interações
 
 - Topo: recorte rotativo de trabalhos (pausa no hover/foco e com botão).
@@ -51,6 +59,8 @@ tudo isso aparece automaticamente.
 - Carrosséis: arraste, botões, setas do teclado e contador.
 - Páginas de projeto: imagens ampliáveis (setas, Esc, deslizar no celular),
   vídeos com controles de reprodução/som e barra de leitura.
+- Nome do topo entra letra a letra; títulos sobem por máscara ao entrar na tela.
+- Prévia do índice inclina conforme a velocidade do cursor; botões magnéticos.
 - Tudo respeita "reduzir movimento" do sistema.
 
 ## Deploy

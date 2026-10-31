@@ -30,9 +30,14 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
     let raf = 0;
     const tick = () => {
       const k = reduce ? 1 : 0.16;
-      pos.current.x += (target.current.x - pos.current.x) * k;
+      const dx = (target.current.x - pos.current.x) * k;
+      pos.current.x += dx;
       pos.current.y += (target.current.y - pos.current.y) * k;
-      if (preview.current) preview.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
+      // Inclina levemente na direção do movimento — dá peso à imagem.
+      const tilt = reduce ? 0 : Math.max(-7, Math.min(7, dx * 0.35));
+      if (preview.current) {
+        preview.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -47,7 +52,6 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
   return (
     <div className="index" onPointerMove={onMove} onPointerLeave={() => setActive(null)}>
       <div className="filters" role="group" aria-label="Filtrar trabalhos">
-        <span className="label filters__title">Filtrar</span>
         {(["all", ...tags] as const).map((t) => {
           const total = t === "all" ? projects.length : projects.filter((p) => p.tags.includes(t)).length;
           return (
@@ -63,17 +67,11 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
             </button>
           );
         })}
-        <span className="filters__status label" aria-live="polite">
-          {count === projects.length ? "Mostrando todos" : `${count} de ${projects.length}`}
+        <span className="sr-only" aria-live="polite">
+          {count === projects.length ? `${count} trabalhos` : `${count} de ${projects.length} trabalhos`}
         </span>
       </div>
 
-      <div className="index__head" aria-hidden="true">
-        <span>Nº</span>
-        <span>Cliente</span>
-        <span>Categoria</span>
-        <span>Formatos</span>
-      </div>
       <ol className="index__list">
         {projects.map((p, i) => (
           <li key={p.slug} hidden={!visible(p)}>
@@ -87,7 +85,6 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
               <span className="index__n">{n(i)}</span>
               <span className="index__client">{p.client}</span>
               <span className="index__cat">{p.category}</span>
-              <span className="index__formats">{p.formats.join(" · ")}</span>
               <span className="index__mini" aria-hidden="true">
                 <Image src={coverSrc(p)} alt="" width={p.cover.width} height={p.cover.height} sizes="96px" quality={75} />
               </span>

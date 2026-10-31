@@ -18,13 +18,32 @@ export function Cursor() {
     const target = { x: -100, y: -100 };
     const pos = { x: -100, y: -100 };
     let raf = 0;
+    // Botões magnéticos: acompanham o cursor alguns pixels quando ele está por cima.
+    let magnet: HTMLElement | null = null;
+    const release = () => {
+      if (magnet) magnet.style.translate = "";
+      magnet = null;
+    };
     const onMove = (e: PointerEvent) => {
       target.x = e.clientX;
       target.y = e.clientY;
-      const t = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-cursor]");
+      const node = e.target as HTMLElement | null;
+      const t = node?.closest<HTMLElement>("[data-cursor]");
       setLabel(t ? (t.dataset.cursor ?? null) : null);
+      const m = reduce ? null : node?.closest<HTMLElement>("[data-magnetic]");
+      if (m !== magnet) release();
+      if (m) {
+        magnet = m;
+        const r = m.getBoundingClientRect();
+        const mx = ((e.clientX - (r.left + r.width / 2)) / r.width) * 10;
+        const my = ((e.clientY - (r.top + r.height / 2)) / r.height) * 8;
+        m.style.translate = `${mx.toFixed(1)}px ${my.toFixed(1)}px`;
+      }
     };
-    const onLeave = () => setLabel(null);
+    const onLeave = () => {
+      setLabel(null);
+      release();
+    };
     const tick = () => {
       const k = reduce ? 1 : 0.22;
       pos.x += (target.x - pos.x) * k;
@@ -39,6 +58,7 @@ export function Cursor() {
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
+      release();
     };
   }, [fine, reduce]);
 

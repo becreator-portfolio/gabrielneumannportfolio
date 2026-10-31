@@ -2,32 +2,33 @@ import Link from "next/link";
 import type { Media as MediaType, Project } from "@/content/types";
 import { Media } from "./Media";
 import { Rail } from "./Rail";
+import { Split } from "./Split";
 
 const n = (i: number) => String(i + 1).padStart(2, "0");
 
 /** Apresentação de um projeto na home. Cada layout tem composição própria. */
-export function Feature({ project, index, total }: { project: Project; index: number; total: number }) {
+export function Feature({ project, index }: { project: Project; index: number }) {
   const { feature: f } = project;
   const href = `/trabalhos/${project.slug}`;
-  const fit = Math.max(...project.client.split(/\s+/).map((w) => w.length));
+  const fit = Math.max(...project.client.split(" ").map((w) => w.length));
 
   const caption = (
-    <div className="feat__caption" data-reveal>
-      <p className="label feat__meta">
+    <div className="feat__caption">
+      <p className="label feat__meta" data-reveal>
         <span className="feat__num">{n(index)}</span>
-        <span className="label__sep">/</span>
-        <span>{String(total).padStart(2, "0")}</span>
         <span className="label__gap">{project.category}</span>
       </p>
-      <h3 className="feat__title" style={{ "--fit": fit } as React.CSSProperties}>
-        <Link href={href}>{project.client}</Link>
+      <h3 className="feat__title" style={{ "--fit": fit } as React.CSSProperties} data-reveal="split">
+        <Link href={href}>
+          <Split text={project.client} />
+          <span className="feat__arrow" aria-hidden="true">
+            ↗
+          </span>
+        </Link>
       </h3>
-      <p className="feat__summary">{project.summary}</p>
-      <p className="feat__formats label">{project.formats.join(" · ")}</p>
-      <Link href={href} className="cta" tabIndex={-1} aria-hidden="true">
-        <span>Ver projeto</span>
-        <span aria-hidden="true">→</span>
-      </Link>
+      <p className="feat__summary" data-reveal>
+        {project.summary}
+      </p>
     </div>
   );
 

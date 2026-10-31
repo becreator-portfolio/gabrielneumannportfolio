@@ -117,10 +117,10 @@ export function Rail({ label, children, className }: Props) {
         <span className="rail__bar" aria-hidden="true">
           <span style={{ transform: `scaleX(${state.current / total})` }} />
         </span>
-        <button type="button" className="rail__btn" onClick={() => go(-1)} disabled={state.start} aria-label="Anterior">
+        <button type="button" className="rail__btn" data-magnetic onClick={() => go(-1)} disabled={state.start} aria-label="Anterior">
           ←
         </button>
-        <button type="button" className="rail__btn" onClick={() => go(1)} disabled={state.end} aria-label="Próximo">
+        <button type="button" className="rail__btn" data-magnetic onClick={() => go(1)} disabled={state.end} aria-label="Próximo">
           →
         </button>
       </div>

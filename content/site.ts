@@ -9,11 +9,12 @@ export const site = {
   description:
     "Portfólio de Gabriel Neumann — design e comunicação visual. Identidade visual, criativos para redes, carrosséis, vídeos de conversão e geração com IA.",
   statement: "Ajudo marcas a contar histórias visuais que conectam as suas pessoas com o mundo.",
-  about: [
-    "Me chamo Gabriel Neumann, tenho 23 anos e trabalho com design e comunicação visual há pelo menos seis — tempo em que fui construindo os meus próprios métodos.",
-    "Ajudo marcas a contar histórias visuais que conectam as suas pessoas com o mundo. Sou movido por arte e por detalhe, e é no detalhe que eu presto mais atenção.",
-    "Aqui estão alguns dos meus projetos favoritos — ou os mais recentes.",
-  ],
+  about: {
+    lead: "Tenho 23 anos e, há pelo menos seis, venho construindo meus próprios métodos em design e comunicação visual.",
+    note: "Sou movido por arte e por detalhe.",
+  },
+  /** Frase do próprio Gabriel, usada como subtítulo da seção de trabalhos. */
+  worksNote: "Meus favoritos — ou os mais recentes.",
   capabilities: [
     "Identidade visual",
     "Criativos para redes sociais",

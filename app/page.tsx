@@ -2,13 +2,10 @@ import { Contact } from "@/components/Contact";
 import { Feature } from "@/components/Feature";
 import { Footer } from "@/components/Footer";
 import { HeroReel, type ReelItem } from "@/components/HeroReel";
+import { Split } from "@/components/Split";
 import { WorkIndex } from "@/components/WorkIndex";
 import { projects } from "@/content/projects";
-import { hasContact, site } from "@/content/site";
-
-const clients = projects
-  .filter((p) => p.slug !== "geracao-com-ia")
-  .flatMap((p) => p.client.split(" & "));
+import { site } from "@/content/site";
 
 export default function Home() {
   // Recorte rotativo do topo: um trabalho de cada linguagem.
@@ -29,98 +26,62 @@ export default function Home() {
     <main className="home">
       <section className="hero" aria-labelledby="hero-title">
         <h1 id="hero-title" className="hero__name">
-          <span className="hero__line hero__line--1">Gabriel</span>
-          <span className="hero__line hero__line--2">Neumann</span>
+          <span className="hero__line hero__line--1">
+            <Split text="Gabriel" by="char" />
+          </span>
+          <span className="hero__line hero__line--2">
+            <Split text="Neumann" by="char" offset={4} />
+          </span>
         </h1>
         <div className="hero__tile">
           <HeroReel items={reel} />
         </div>
-        <p className="hero__meta label">
-          <span>{site.role}</span>
-          <span>
-            Seleção de trabalhos — {String(projects.length).padStart(2, "0")}
-          </span>
+        <p className="hero__statement">
+          <Split text={site.statement} offset={10} />
         </p>
-        <p className="hero__statement">{site.statement}</p>
         <div className="hero__actions">
-          <a href="#trabalhos" className="button button--solid">
+          <a href="#trabalhos" className="button button--solid" data-magnetic>
             <span>Ver trabalhos</span>
             <span aria-hidden="true">↓</span>
           </a>
-          {hasContact && (
-            <a href="#contato" className="button">
-              <span>Contato</span>
-              <span aria-hidden="true">→</span>
-            </a>
-          )}
         </div>
       </section>
 
       <section id="trabalhos" className="works" aria-labelledby="trabalhos-title">
-        <div className="section-head">
-          <p className="label">
-            <span>(01)</span>
-          </p>
-          <h2 id="trabalhos-title" className="section-title">
-            Trabalhos selecionados
+        <header className="section-head">
+          <h2 id="trabalhos-title" className="section-title" data-reveal="split">
+            <Split text="Trabalhos" />
+            <sup className="section-count">{String(projects.length).padStart(2, "0")}</sup>
           </h2>
-        </div>
+          <p className="section-note" data-reveal>
+            {site.worksNote}
+          </p>
+        </header>
         <WorkIndex projects={projects} />
         <div className="features">
           {projects.map((p, i) => (
-            <Feature key={p.slug} project={p} index={i} total={projects.length} />
+            <Feature key={p.slug} project={p} index={i} />
           ))}
         </div>
       </section>
 
       <section id="sobre" className="about" aria-labelledby="sobre-title">
-        <div className="section-head">
-          <p className="label">
-            <span>(02)</span>
-          </p>
-          <h2 id="sobre-title" className="section-title">
-            Sobre
+        <header className="section-head">
+          <h2 id="sobre-title" className="section-title" data-reveal="split">
+            <Split text="Sobre" />
           </h2>
-        </div>
+        </header>
         <div className="about__body">
-          <dl className="about__facts" data-reveal>
-            <div>
-              <dt className="label">Idade</dt>
-              <dd>23</dd>
-            </div>
-            <div>
-              <dt className="label">Anos de prática</dt>
-              <dd>6+</dd>
-            </div>
-            <div>
-              <dt className="label">Projetos nesta seleção</dt>
-              <dd>{String(projects.length).padStart(2, "0")}</dd>
-            </div>
-            <div>
-              <dt className="label">Áreas de atuação</dt>
-              <dd>{String(site.capabilities.length).padStart(2, "0")}</dd>
-            </div>
-          </dl>
-          <p className="about__lead" data-reveal>
-            {site.about[0]}
+          <p className="about__lead" data-reveal="split">
+            <Split text={site.about.lead} />
           </p>
-          <div className="about__text" data-reveal>
-            {site.about.slice(1).map((t) => (
-              <p key={t}>{t}</p>
-            ))}
-          </div>
+          <p className="about__note" data-reveal>
+            {site.about.note}
+          </p>
           <div className="about__col" data-reveal>
             <h3 className="label">Áreas</h3>
             <ul>
               {site.capabilities.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="about__col" data-reveal>
-            <h3 className="label">Marcas nesta seleção</h3>
-            <ul>
-              {clients.map((c) => (
                 <li key={c}>{c}</li>
               ))}
             </ul>
