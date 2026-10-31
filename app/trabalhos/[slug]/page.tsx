@@ -4,7 +4,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Blocks } from "@/components/Blocks";
 import { Footer } from "@/components/Footer";
-import { getProject, projectIndex, projects } from "@/content/projects";
+import { Lightbox } from "@/components/Lightbox";
+import { allMedia, getProject, projectIndex, projects } from "@/content/projects";
+import type { ImageMedia } from "@/content/types";
+import { hasContact } from "@/content/site";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -45,6 +48,7 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <main className="project">
+      <div className="progress" aria-hidden="true" />
       <header className="phead">
         <p className="phead__top label">
           <Link href="/#trabalhos" className="roll" data-text="← Todos os trabalhos">
@@ -85,6 +89,17 @@ export default async function ProjectPage({ params }: Params) {
       </header>
 
       <Blocks blocks={project.blocks} />
+      <Lightbox images={allMedia(project).filter((m): m is ImageMedia => m.kind === "image")} />
+
+      {hasContact && (
+      <aside className="pitch" aria-label="Contato">
+        <p className="label">Gostou do que viu?</p>
+        <Link href="/#contato" className="pitch__link">
+          <span>Vamos conversar sobre a sua marca</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      </aside>
+      )}
 
       <nav className="next" aria-label="Próximo projeto">
         <Link href={`/trabalhos/${next.slug}`} className="next__link">

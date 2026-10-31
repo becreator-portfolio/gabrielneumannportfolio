@@ -1,6 +1,7 @@
-import { contactLabels, site, type ContactKey } from "@/content/site";
+import { contactLabels, hasContact, site, type ContactKey } from "@/content/site";
 
 export function Contact() {
+  if (!hasContact) return null;
   const entries = (Object.keys(site.contact) as ContactKey[])
     .map((k) => ({ key: k, value: site.contact[k] as string }))
     .filter((e) => e.value);
@@ -14,8 +15,7 @@ export function Contact() {
       <h2 id="contato-title" className="contact__title" data-reveal>
         Vamos conversar sobre a sua marca.
       </h2>
-      {entries.length > 0 ? (
-        <ul className="contact__list" data-reveal>
+      <ul className="contact__list" data-reveal>
           {entries.map((e) => {
             const href = e.key === "email" ? `mailto:${e.value}` : e.value;
             const shown = e.key === "email" ? e.value : e.value.replace(/^https?:\/\/(www\.)?/, "");
@@ -29,8 +29,7 @@ export function Contact() {
               </li>
             );
           })}
-        </ul>
-      ) : null}
+      </ul>
     </section>
   );
 }

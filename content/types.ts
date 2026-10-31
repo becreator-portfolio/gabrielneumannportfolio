@@ -44,8 +44,19 @@ export type Feature =
   | { layout: "single"; main: Media; align: "left" | "right" }
   | { layout: "pair"; items: [Media, Media] };
 
+export type Tag = "identidade" | "social" | "video" | "ia";
+
+export const tagLabels: Record<Tag, string> = {
+  identidade: "Identidade visual",
+  social: "Redes sociais",
+  video: "Vídeo",
+  ia: "IA",
+};
+
 export type Project = {
   slug: string;
+  /** Usadas no filtro do índice. */
+  tags: Tag[];
   client: string;
   /** Rótulo curto da categoria (ex.: "Identidade visual"). */
   category: string;

@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { site } from "@/content/site";
-
-const links = [
-  { href: "/#trabalhos", label: "Trabalhos" },
-  { href: "/#sobre", label: "Sobre" },
-  { href: "/#contato", label: "Contato" },
-];
+import { navLinks as links, site } from "@/content/site";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -21,6 +15,28 @@ export function Header() {
     setLastPath(pathname);
     setOpen(false);
   }
+
+  // Seção visível na home, para marcar o item ativo da navegação.
+  const [section, setSection] = useState<string | null>(null);
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const ids = ["trabalhos", "sobre", "contato"];
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setSection(e.target.id);
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    const onTop = () => window.scrollY < window.innerHeight * 0.5 && setSection(null);
+    window.addEventListener("scroll", onTop, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onTop);
+    };
+  }, [pathname]);
+  const current = pathname === "/" ? section : pathname.startsWith("/trabalhos") ? "trabalhos" : null;
 
   useEffect(() => {
     document.documentElement.toggleAttribute("data-menu-open", open);
@@ -39,7 +55,13 @@ export function Header() {
         <span className="header__role">{site.role}</span>
         <nav className="header__nav" aria-label="Principal">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="roll" data-text={l.label}>
+            <Link
+              key={l.href}
+              href={l.href}
+              className="roll"
+              data-text={l.label}
+              aria-current={current === l.href.slice(2) ? "location" : undefined}
+            >
               <span>{l.label}</span>
             </Link>
           ))}

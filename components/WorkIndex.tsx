@@ -3,35 +3,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { Project } from "@/content/types";
+import { tagLabels, type Project, type Tag } from "@/content/types";
+import { useReducedMotion } from "./useReducedMotion";
 
 const n = (i: number) => String(i + 1).padStart(2, "0");
+const coverSrc = (p: Project) => (p.cover.kind === "video" ? p.cover.poster : p.cover.src);
 
 /**
- * Índice tipográfico dos projetos. No desktop, a capa acompanha o cursor.
+ * Índice tipográfico com filtro por tipo de trabalho.
+ * Desktop: a capa acompanha o cursor. Toque/tablet: miniatura na linha.
  */
 export function WorkIndex({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<number | null>(null);
+  const [filter, setFilter] = useState<Tag | "all">("all");
+  const reduce = useReducedMotion();
   const preview = useRef<HTMLDivElement>(null);
   const target = useRef({ x: 0, y: 0 });
   const pos = useRef({ x: 0, y: 0 });
 
+  const tags = (Object.keys(tagLabels) as Tag[]).filter((t) => projects.some((p) => p.tags.includes(t)));
+  const visible = (p: Project) => filter === "all" || p.tags.includes(filter);
+  const count = projects.filter(visible).length;
+
   useEffect(() => {
     if (active === null) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     const tick = () => {
       const k = reduce ? 1 : 0.16;
       pos.current.x += (target.current.x - pos.current.x) * k;
       pos.current.y += (target.current.y - pos.current.y) * k;
-      if (preview.current) {
-        preview.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
-      }
+      if (preview.current) preview.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [active]);
+  }, [active, reduce]);
 
   const onMove = (e: React.PointerEvent) => {
     target.current = { x: e.clientX, y: e.clientY };
@@ -40,6 +46,28 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
 
   return (
     <div className="index" onPointerMove={onMove} onPointerLeave={() => setActive(null)}>
+      <div className="filters" role="group" aria-label="Filtrar trabalhos">
+        <span className="label filters__title">Filtrar</span>
+        {(["all", ...tags] as const).map((t) => {
+          const total = t === "all" ? projects.length : projects.filter((p) => p.tags.includes(t)).length;
+          return (
+            <button
+              key={t}
+              type="button"
+              className="filter"
+              aria-pressed={filter === t}
+              onClick={() => setFilter(t)}
+            >
+              {t === "all" ? "Todos" : tagLabels[t]}
+              <sup>{String(total).padStart(2, "0")}</sup>
+            </button>
+          );
+        })}
+        <span className="filters__status label" aria-live="polite">
+          {count === projects.length ? "Mostrando todos" : `${count} de ${projects.length}`}
+        </span>
+      </div>
+
       <div className="index__head" aria-hidden="true">
         <span>Nº</span>
         <span>Cliente</span>
@@ -48,7 +76,7 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
       </div>
       <ol className="index__list">
         {projects.map((p, i) => (
-          <li key={p.slug} data-reveal>
+          <li key={p.slug} hidden={!visible(p)}>
             <Link
               href={`/trabalhos/${p.slug}`}
               className="index__row"
@@ -60,21 +88,23 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
               <span className="index__client">{p.client}</span>
               <span className="index__cat">{p.category}</span>
               <span className="index__formats">{p.formats.join(" · ")}</span>
-              <span className="index__arrow" aria-hidden="true">→</span>
+              <span className="index__mini" aria-hidden="true">
+                <Image src={coverSrc(p)} alt="" width={p.cover.width} height={p.cover.height} sizes="96px" quality={75} />
+              </span>
+              <span className="index__arrow" aria-hidden="true">
+                →
+              </span>
             </Link>
           </li>
         ))}
       </ol>
+
       <div ref={preview} className="index__preview" data-visible={active !== null || undefined} aria-hidden="true">
-        {projects.map((p, i) => {
-          const c = p.cover;
-          const src = c.kind === "video" ? c.poster : c.src;
-          return (
-            <div key={p.slug} className="index__thumb" data-active={active === i || undefined}>
-              <Image src={src} alt="" width={c.width} height={c.height} sizes="320px" quality={75} />
-            </div>
-          );
-        })}
+        {projects.map((p, i) => (
+          <div key={p.slug} className="index__thumb" data-active={active === i || undefined}>
+            <Image src={coverSrc(p)} alt="" width={p.cover.width} height={p.cover.height} sizes="280px" quality={75} />
+          </div>
+        ))}
       </div>
     </div>
   );

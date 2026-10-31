@@ -112,6 +112,7 @@ const avulsos = {
 export const projects: Project[] = [
   {
     slug: "oitta-sushi",
+    tags: ["identidade", "social", "video"],
     client: "Oitta Sushi",
     category: "Identidade visual",
     summary: "Manual de identidade visual e primeiras aplicações da marca.",
@@ -160,6 +161,7 @@ export const projects: Project[] = [
   },
   {
     slug: "kampeki",
+    tags: ["social", "video"],
     client: "Kampeki",
     category: "Carrossel",
     summary: "Carrossel de pratos, post sobre o espaço da casa e vídeo de montagem.",
@@ -178,6 +180,7 @@ export const projects: Project[] = [
   },
   {
     slug: "inb-burguer",
+    tags: ["video"],
     client: "INB Burguer",
     category: "Vídeo de conversão",
     summary: "Dois reels construídos sobre a brasa e a montagem do lanche.",
@@ -192,6 +195,7 @@ export const projects: Project[] = [
   },
   {
     slug: "geracao-com-ia",
+    tags: ["ia", "video"],
     client: "Geração com IA",
     category: "Animação",
     summary: "Duas animações produzidas com geração de imagem e vídeo por IA.",
@@ -210,6 +214,7 @@ export const projects: Project[] = [
   },
   {
     slug: "johns-pizza",
+    tags: ["social"],
     client: "John’s Pizza Delivery",
     category: "Criativos",
     summary: "Série de posts para o delivery: lançamento, mais vendido e canais de pedido.",
@@ -225,6 +230,7 @@ export const projects: Project[] = [
   },
   {
     slug: "la-mafia",
+    tags: ["video"],
     client: "La Mafia Barbearia Social Club",
     category: "Vídeo",
     summary: "Reel para a barbearia, com legendas palavra a palavra.",
@@ -237,6 +243,7 @@ export const projects: Project[] = [
   },
   {
     slug: "mark",
+    tags: ["video"],
     client: "Mark",
     category: "Vídeo de conversão",
     summary: "Reel com fala direta para a câmera, em frente à fachada.",
@@ -249,6 +256,7 @@ export const projects: Project[] = [
   },
   {
     slug: "recheadinhos",
+    tags: ["social", "video"],
     client: "Recheadinhos",
     category: "Criativo e vídeo",
     summary: "Post de cardápio digital e reel em frente à loja.",
@@ -261,6 +269,7 @@ export const projects: Project[] = [
   },
   {
     slug: "criativos-avulsos",
+    tags: ["social"],
     client: "Artes Burger & El Pastelero",
     category: "Criativos",
     summary: "Duas peças que se apropriam de formatos conhecidos da internet.",

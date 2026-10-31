@@ -13,10 +13,10 @@ type Props = {
 /** Renderiza imagem ou vídeo a partir do modelo de conteúdo. */
 export function Media({ media, sizes, mode = "preview", priority, className }: Props) {
   if (media.kind === "video") {
-    return <Video media={media} mode={mode} className={className} />;
+    return <Video media={media} mode={mode} sizes={sizes} priority={priority} className={className} />;
   }
   return (
-    <div className={["frame", className].filter(Boolean).join(" ")} style={{ aspectRatio: `${media.width} / ${media.height}` }}>
+    <span className={["frame", className].filter(Boolean).join(" ")} style={{ aspectRatio: `${media.width} / ${media.height}` }}>
       <Image
         src={media.src}
         alt={media.alt}
@@ -26,6 +26,6 @@ export function Media({ media, sizes, mode = "preview", priority, className }: P
         quality={85}
         priority={priority}
       />
-    </div>
+    </span>
   );
 }

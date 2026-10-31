@@ -1,20 +1,29 @@
-import Link from "next/link";
 import { Contact } from "@/components/Contact";
 import { Feature } from "@/components/Feature";
 import { Footer } from "@/components/Footer";
-import { Media } from "@/components/Media";
+import { HeroReel, type ReelItem } from "@/components/HeroReel";
 import { WorkIndex } from "@/components/WorkIndex";
 import { projects } from "@/content/projects";
-import { site } from "@/content/site";
+import { hasContact, site } from "@/content/site";
 
 const clients = projects
   .filter((p) => p.slug !== "geracao-com-ia")
   .flatMap((p) => p.client.split(" & "));
 
 export default function Home() {
-  // Destaque animado do topo: o reel da INB Burguer.
-  const heroIndex = projects.findIndex((p) => p.slug === "inb-burguer");
-  const hero = projects[heroIndex];
+  // Recorte rotativo do topo: um trabalho de cada linguagem.
+  const pick = (slug: string, media?: (p: (typeof projects)[number]) => ReelItem["media"]): ReelItem => {
+    const i = projects.findIndex((p) => p.slug === slug);
+    const p = projects[i];
+    return { slug, client: p.client, n: String(i + 1).padStart(2, "0"), media: media ? media(p) : p.cover };
+  };
+  const reel: ReelItem[] = [
+    pick("inb-burguer"),
+    pick("kampeki"),
+    pick("oitta-sushi", (p) => (p.feature.layout === "system" ? p.feature.side : p.cover)),
+    pick("johns-pizza"),
+    pick("la-mafia"),
+  ];
 
   return (
     <main className="home">
@@ -23,22 +32,28 @@ export default function Home() {
           <span className="hero__line hero__line--1">Gabriel</span>
           <span className="hero__line hero__line--2">Neumann</span>
         </h1>
-        <Link href={`/trabalhos/${hero.slug}`} className="hero__tile" aria-label={`Ver projeto ${hero.client}`}>
-          <Media media={hero.cover} sizes="(max-width: 768px) 40vw, 16vw" priority />
-          <span className="hero__tilecap label">
-            <span>{String(heroIndex + 1).padStart(2, "0")}</span>
-            <span className="label__gap">{hero.client}</span>
-          </span>
-        </Link>
+        <div className="hero__tile">
+          <HeroReel items={reel} />
+        </div>
         <p className="hero__meta label">
           <span>{site.role}</span>
-          <span>Portfólio</span>
+          <span>
+            Seleção de trabalhos — {String(projects.length).padStart(2, "0")}
+          </span>
         </p>
         <p className="hero__statement">{site.statement}</p>
-        <a href="#trabalhos" className="hero__down label">
-          <span>{String(projects.length).padStart(2, "0")} trabalhos</span>
-          <span aria-hidden="true">↓</span>
-        </a>
+        <div className="hero__actions">
+          <a href="#trabalhos" className="button button--solid">
+            <span>Ver trabalhos</span>
+            <span aria-hidden="true">↓</span>
+          </a>
+          {hasContact && (
+            <a href="#contato" className="button">
+              <span>Contato</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </div>
       </section>
 
       <section id="trabalhos" className="works" aria-labelledby="trabalhos-title">
@@ -68,6 +83,24 @@ export default function Home() {
           </h2>
         </div>
         <div className="about__body">
+          <dl className="about__facts" data-reveal>
+            <div>
+              <dt className="label">Idade</dt>
+              <dd>23</dd>
+            </div>
+            <div>
+              <dt className="label">Anos de prática</dt>
+              <dd>6+</dd>
+            </div>
+            <div>
+              <dt className="label">Projetos nesta seleção</dt>
+              <dd>{String(projects.length).padStart(2, "0")}</dd>
+            </div>
+            <div>
+              <dt className="label">Áreas de atuação</dt>
+              <dd>{String(site.capabilities.length).padStart(2, "0")}</dd>
+            </div>
+          </dl>
           <p className="about__lead" data-reveal>
             {site.about[0]}
           </p>

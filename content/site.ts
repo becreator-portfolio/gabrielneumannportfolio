@@ -39,3 +39,13 @@ export const contactLabels: Record<ContactKey, string> = {
   behance: "Behance",
   linkedin: "LinkedIn",
 };
+
+/** Há ao menos um canal de contato preenchido? Controla a seção e os atalhos de contato. */
+export const hasContact = Object.values(site.contact).some(Boolean);
+
+/** Navegação principal: o item Contato só aparece com um canal confirmado. */
+export const navLinks = [
+  { href: "/#trabalhos", label: "Trabalhos" },
+  { href: "/#sobre", label: "Sobre" },
+  ...(hasContact ? [{ href: "/#contato", label: "Contato" }] : []),
+];

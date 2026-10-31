@@ -3,6 +3,7 @@ import "@fontsource-variable/archivo/wdth.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
+import { Cursor } from "@/components/Cursor";
 import { Header } from "@/components/Header";
 import { Reveal } from "@/components/Reveal";
 import { site } from "@/content/site";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <div id="conteudo">{children}</div>
         <Reveal />
+        <Cursor />
       </body>
     </html>
   );
