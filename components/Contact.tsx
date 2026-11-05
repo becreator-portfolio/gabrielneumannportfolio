@@ -1,3 +1,4 @@
+import { Split } from "./Split";
 import { contactLabels, hasContact, site, type ContactKey } from "@/content/site";
 
 export function Contact() {
@@ -7,13 +8,12 @@ export function Contact() {
     .filter((e) => e.value);
 
   return (
-    <section id="contato" className="contact" aria-labelledby="contato-title">
+    <section id="contato" className="contact" aria-labelledby="contato-title" data-tone="dark">
       <p className="label" data-reveal>
-        <span>(03)</span>
-        <span className="label__gap">Contato</span>
+        Contato
       </p>
-      <h2 id="contato-title" className="contact__title" data-reveal>
-        Vamos conversar sobre a sua marca.
+      <h2 id="contato-title" className="contact__title" data-reveal="split">
+        <Split text="Vamos conversar sobre a sua marca." />
       </h2>
       <ul className="contact__list" data-reveal>
           {entries.map((e) => {

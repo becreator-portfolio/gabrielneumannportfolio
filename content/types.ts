@@ -70,4 +70,6 @@ export type Project = {
   blocks: Block[];
   /** Observação de crédito exibida na página do projeto, quando houver. */
   credit?: string;
+  /** Tom de fundo do capítulo e da página do projeto. Padrão: "light". */
+  tone?: "light" | "dark";
 };

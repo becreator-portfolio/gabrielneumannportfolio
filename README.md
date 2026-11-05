@@ -15,8 +15,9 @@ npm run dev
 ## Estrutura
 
 ```
-app/                  rotas (home, /trabalhos/[slug], sitemap, robots) e estilos globais
-components/           componentes reutilizáveis (Header, Feature, Blocks, Media, Video…)
+app/                  rotas (home, /trabalhos/[slug], sitemap, robots)
+app/styles/           CSS por área: base, chrome (cabeçalho/índice/rodapé), media, home, project
+components/           componentes (Hero, Chapter, IndexOverlay, Motion, Blocks, Media, Video…)
 content/projects.ts   todos os projetos — ordem, textos, mídias e composição
 content/site.ts       nome, bio, áreas e canais de contato
 content/types.ts      modelo de conteúdo (tipos)
@@ -31,7 +32,8 @@ scripts/              utilitários para preparar imagens e vídeos
    - vídeos: `scripts/encode-video.sh original.mp4 public/work/<slug> nome 3 1`
      (gera o vídeo com áudio, uma prévia muda de 6 s e o poster)
 2. Acrescente uma entrada em `content/projects.ts`. Cada projeto define:
-   - `feature` — a composição na home (`system`, `carousel`, `duo`, `cinema`, `trio`, `single`, `pair`);
+   - `feature` — a composição do capítulo na home (`system`, `carousel`, `duo`, `cinema`, `trio`, `single`, `pair`);
+   - `tone` — `"dark"` ou `"light"` (padrão): fundo do capítulo e da página do projeto;
    - `blocks` — o corpo da página (`media`, `grid`, `strip`, `text`).
 3. A ordem do array `projects` é a ordem do site. Para remover um projeto, apague a entrada.
 
@@ -49,19 +51,28 @@ tudo isso aparece automaticamente.
   títulos, 100% para texto de interface, 116% para rótulos.
 - **Newsreader** (variável, tamanho óptico) para a voz editorial: frase de
   apresentação, resumos, textos dos projetos e Sobre.
-- Escala em quarta perfeita sobre 17px; tokens `--fs-*` em `app/globals.css`.
+- Escala em quarta perfeita sobre 17px; tokens `--fs-*` em `app/styles/base.css`.
 
-## Interações
+## Estrutura da home e interações
 
-- Topo: recorte rotativo de trabalhos (pausa no hover/foco e com botão).
-- Índice: filtro por tipo (Identidade visual, Redes sociais, Vídeo, IA);
-  capa acompanha o cursor no desktop e vira miniatura no toque.
+1. **Abertura** — o nome funciona como cabeçalho de revista, com um recorte
+   rotativo de trabalhos no centro (pausa no hover/foco e com botão). Ao rolar,
+   o nome se abre e o recorte cresce até tomar a tela.
+2. **Trabalhos** — cada projeto é um capítulo: régua, número, título, resumo e
+   uma composição de mídia própria. A cor de fundo acompanha o capítulo em
+   leitura (claro/escuro) e o cabeçalho mostra qual é (`03/09 INB Burguer`).
+3. **Interlúdio** — frase do Gabriel que acende palavra a palavra com a rolagem.
+4. **Sobre** e **rodapé**.
+
+- **Índice** (botão no cabeçalho; no celular, "Menu"): sobreposição com as
+  seções e todos os trabalhos, filtro por tipo e capa que segue o cursor.
+- Parallax leve nas composições; mídia abre por recorte ao entrar na tela.
 - Carrosséis: arraste, botões, setas do teclado e contador.
 - Páginas de projeto: imagens ampliáveis (setas, Esc, deslizar no celular),
   vídeos com controles de reprodução/som e barra de leitura.
-- Nome do topo entra letra a letra; títulos sobem por máscara ao entrar na tela.
-- Prévia do índice inclina conforme a velocidade do cursor; botões magnéticos.
-- Tudo respeita "reduzir movimento" do sistema.
+- Todo o comportamento ligado à rolagem roda num único laço
+  (`components/Motion.tsx`). Com "reduzir movimento", nada é fixado, animado
+  ou tocado sozinho.
 
 ## Deploy
 

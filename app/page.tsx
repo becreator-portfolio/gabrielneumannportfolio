@@ -1,91 +1,83 @@
+import { Chapter } from "@/components/Chapter";
 import { Contact } from "@/components/Contact";
-import { Feature } from "@/components/Feature";
 import { Footer } from "@/components/Footer";
-import { HeroReel, type ReelItem } from "@/components/HeroReel";
+import { Hero, type ReelItem } from "@/components/Hero";
 import { Split } from "@/components/Split";
-import { WorkIndex } from "@/components/WorkIndex";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 
+const words = (t: string) => t.split(" ").length;
+
 export default function Home() {
-  // Recorte rotativo do topo: um trabalho de cada linguagem.
+  // Recorte rotativo da abertura: um trabalho de cada linguagem.
   const pick = (slug: string, media?: (p: (typeof projects)[number]) => ReelItem["media"]): ReelItem => {
     const i = projects.findIndex((p) => p.slug === slug);
     const p = projects[i];
     return { slug, client: p.client, n: String(i + 1).padStart(2, "0"), media: media ? media(p) : p.cover };
   };
   const reel: ReelItem[] = [
-    pick("inb-burguer"),
-    pick("kampeki"),
     pick("oitta-sushi", (p) => (p.feature.layout === "system" ? p.feature.side : p.cover)),
+    pick("kampeki"),
     pick("johns-pizza"),
+    pick("inb-burguer"),
     pick("la-mafia"),
   ];
 
+  // O interlúdio entra entre o primeiro e o segundo bloco de trabalhos.
+  const BREAK = 5;
+  const total = projects.length;
+
   return (
     <main className="home">
-      <section className="hero" aria-labelledby="hero-title">
-        <h1 id="hero-title" className="hero__name">
-          <span className="hero__line hero__line--1">
-            <Split text="Gabriel" by="char" />
-          </span>
-          <span className="hero__line hero__line--2">
-            <Split text="Neumann" by="char" offset={4} />
-          </span>
-        </h1>
-        <div className="hero__tile">
-          <HeroReel items={reel} />
-        </div>
-        <p className="hero__statement">
-          <Split text={site.statement} offset={10} />
-        </p>
-        <div className="hero__actions">
-          <a href="#trabalhos" className="button button--solid" data-magnetic>
-            <span>Ver trabalhos</span>
-            <span aria-hidden="true">↓</span>
-          </a>
-        </div>
-      </section>
+      <Hero items={reel} statement={site.statement} />
 
       <section id="trabalhos" className="works" aria-labelledby="trabalhos-title">
-        <header className="section-head">
-          <h2 id="trabalhos-title" className="section-title" data-reveal="split">
-            <Split text="Trabalhos" />
-            <sup className="section-count">{String(projects.length).padStart(2, "0")}</sup>
+        <header className="works__head" data-tone="light">
+          <h2 id="trabalhos-title" className="works__title" data-reveal="split">
+            <Split text="Trabalhos" by="char" />
+            <sup className="works__count">{String(total).padStart(2, "0")}</sup>
           </h2>
-          <p className="section-note" data-reveal>
-            {site.worksNote}
-          </p>
+          <div className="works__aside" data-reveal>
+            <p className="works__note">{site.worksNote}</p>
+            <button type="button" className="button" data-open-index data-magnetic aria-haspopup="dialog" aria-controls="indice">
+              <span>Índice</span>
+              <span aria-hidden="true">≡</span>
+            </button>
+          </div>
         </header>
-        <WorkIndex projects={projects} />
-        <div className="features">
-          {projects.map((p, i) => (
-            <Feature key={p.slug} project={p} index={i} />
-          ))}
-        </div>
+
+        {projects.slice(0, BREAK).map((p, i) => (
+          <Chapter key={p.slug} project={p} index={i} />
+        ))}
+
+        <aside className="interlude" data-tone="dark" aria-label="Nota">
+          <p className="interlude__text" data-scrub style={{ "--n": words(site.about.note) } as React.CSSProperties}>
+            <Split text={site.about.note} />
+          </p>
+        </aside>
+
+        {projects.slice(BREAK).map((p, i) => (
+          <Chapter key={p.slug} project={p} index={i + BREAK} />
+        ))}
       </section>
 
-      <section id="sobre" className="about" aria-labelledby="sobre-title">
-        <header className="section-head">
-          <h2 id="sobre-title" className="section-title" data-reveal="split">
-            <Split text="Sobre" />
-          </h2>
-        </header>
-        <div className="about__body">
-          <p className="about__lead" data-reveal="split">
-            <Split text={site.about.lead} />
-          </p>
-          <p className="about__note" data-reveal>
-            {site.about.note}
-          </p>
-          <div className="about__col" data-reveal>
-            <h3 className="label">Áreas</h3>
-            <ul>
-              {site.capabilities.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-          </div>
+      <section id="sobre" className="about" aria-labelledby="sobre-title" data-tone="light">
+        <h2 id="sobre-title" className="about__label label">
+          Sobre
+        </h2>
+        <p className="about__lead" data-scrub style={{ "--n": words(site.about.lead) } as React.CSSProperties}>
+          <Split text={site.about.lead} />
+        </p>
+        <div className="about__areas">
+          <h3 className="label">Áreas</h3>
+          <ol>
+            {site.capabilities.map((c, i) => (
+              <li key={c} data-reveal style={{ "--d": i } as React.CSSProperties}>
+                <span className="label mute">{String(i + 1).padStart(2, "0")}</span>
+                <span>{c}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 

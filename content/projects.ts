@@ -157,6 +157,7 @@ export const projects: Project[] = [
   },
   {
     slug: "kampeki",
+    tone: "dark",
     tags: ["social", "video"],
     client: "Kampeki",
     category: "Carrossel",
@@ -173,6 +174,7 @@ export const projects: Project[] = [
   },
   {
     slug: "inb-burguer",
+    tone: "dark",
     tags: ["video"],
     client: "INB Burguer",
     category: "Vídeo de conversão",
@@ -186,6 +188,7 @@ export const projects: Project[] = [
   },
   {
     slug: "geracao-com-ia",
+    tone: "dark",
     tags: ["ia", "video"],
     client: "Geração com IA",
     category: "Animação",
@@ -216,6 +219,7 @@ export const projects: Project[] = [
   },
   {
     slug: "la-mafia",
+    tone: "dark",
     tags: ["video"],
     client: "La Mafia Barbearia Social Club",
     category: "Vídeo",
@@ -229,6 +233,7 @@ export const projects: Project[] = [
   },
   {
     slug: "mark",
+    tone: "dark",
     tags: ["video"],
     client: "Mark",
     category: "Vídeo de conversão",

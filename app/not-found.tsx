@@ -5,7 +5,7 @@ export default function NotFound() {
     <main className="notfound">
       <p className="label">Erro 404</p>
       <h1 className="phead__title">Página não encontrada</h1>
-      <Link href="/" className="cta">
+      <Link href="/" className="link-arrow">
         <span>Voltar para o início</span>
         <span aria-hidden="true">→</span>
       </Link>

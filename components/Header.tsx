@@ -4,24 +4,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { navLinks as links, site } from "@/content/site";
+import { projects } from "@/content/projects";
+import type { ChapterDetail } from "./Motion";
 
 export function Header() {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const [chapter, setChapter] = useState<ChapterDetail>(null);
 
-  // Fecha o menu ao trocar de página.
-  const [lastPath, setLastPath] = useState(pathname);
-  if (pathname !== lastPath) {
-    setLastPath(pathname);
-    setOpen(false);
-  }
+  // Projeto em leitura na home (enviado pelo laço de scroll em Motion).
+  useEffect(() => {
+    const on = (e: Event) => setChapter((e as CustomEvent<ChapterDetail>).detail);
+    window.addEventListener("chapter", on);
+    return () => window.removeEventListener("chapter", on);
+  }, []);
 
   // Seção visível na home, para marcar o item ativo da navegação.
   const [section, setSection] = useState<string | null>(null);
   useEffect(() => {
     if (pathname !== "/") return;
-    const ids = ["trabalhos", "sobre", "contato"];
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const els = ["trabalhos", "sobre", "contato"].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) if (e.isIntersecting) setSection(e.target.id);
@@ -37,22 +38,28 @@ export function Header() {
     };
   }, [pathname]);
   const current = pathname === "/" ? section : pathname.startsWith("/trabalhos") ? "trabalhos" : null;
-
-  useEffect(() => {
-    document.documentElement.toggleAttribute("data-menu-open", open);
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  const now = pathname === "/" ? chapter : null;
 
   return (
-    <header className="header" data-open={open || undefined}>
+    <header className="header">
       <div className="header__bar">
-        <Link href="/" className="header__name" aria-label={`${site.name} — início`} onClick={() => setOpen(false)}>
+        <Link href="/" className="header__name" aria-label={`${site.name} — início`}>
           Gabriel Neumann
         </Link>
-        <span className="header__role">{site.role}</span>
+        <span className="header__now" aria-hidden="true">
+          <span key={now?.n ?? "role"} className="header__now-in">
+            {now ? (
+              <>
+                <span className="header__now-n">
+                  {now.n}/{String(projects.length).padStart(2, "0")}
+                </span>
+                <span className="header__now-t">{now.title}</span>
+              </>
+            ) : (
+              <span className="header__now-t">{site.role}</span>
+            )}
+          </span>
+        </span>
         <nav className="header__nav" aria-label="Principal">
           {links.map((l) => (
             <Link
@@ -66,29 +73,13 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <button
-          type="button"
-          className="header__toggle"
-          aria-expanded={open}
-          aria-controls="menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? "Fechar" : "Menu"}
+        <button type="button" className="header__index" data-open-index aria-haspopup="dialog" aria-controls="indice">
+          <span className="header__index-d">
+            Índice<sup>{String(projects.length).padStart(2, "0")}</sup>
+          </span>
+          <span className="header__index-m">Menu</span>
         </button>
       </div>
-      <nav id="menu" className="menu" aria-label="Menu" hidden={!open}>
-        <ol>
-          {links.map((l, i) => (
-            <li key={l.href}>
-              <Link href={l.href} onClick={() => setOpen(false)}>
-                <span className="menu__n">0{i + 1}</span>
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ol>
-        <p className="menu__foot">{site.role}</p>
-      </nav>
     </header>
   );
 }

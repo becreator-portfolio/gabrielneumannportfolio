@@ -48,7 +48,7 @@ export default async function ProjectPage({ params }: Params) {
   const nextCover = next.cover.kind === "video" ? next.cover.poster : next.cover.src;
 
   return (
-    <main className="project">
+    <main className="project" data-tone={project.tone ?? "light"}>
       <div className="progress" aria-hidden="true" />
       <header className="phead">
         <p className="phead__top label">

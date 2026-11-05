@@ -2,10 +2,15 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/archivo/wdth.css";
 import "@fontsource-variable/newsreader/opsz.css";
 import "@fontsource-variable/newsreader/opsz-italic.css";
-import "./globals.css";
+import "./styles/base.css";
+import "./styles/chrome.css";
+import "./styles/media.css";
+import "./styles/home.css";
+import "./styles/project.css";
 import { Cursor } from "@/components/Cursor";
 import { Header } from "@/components/Header";
-import { Reveal } from "@/components/Reveal";
+import { IndexOverlay } from "@/components/IndexOverlay";
+import { Motion } from "@/components/Motion";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -47,7 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <Header />
         <div id="conteudo">{children}</div>
-        <Reveal />
+        <IndexOverlay />
+        <Motion />
         <Cursor />
       </body>
     </html>

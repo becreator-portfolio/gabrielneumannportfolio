@@ -74,7 +74,7 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
 
       <ol className="index__list">
         {projects.map((p, i) => (
-          <li key={p.slug} hidden={!visible(p)}>
+          <li key={p.slug} hidden={!visible(p)} style={{ "--k": i + 3 } as React.CSSProperties}>
             <Link
               href={`/trabalhos/${p.slug}`}
               className="index__row"
