@@ -37,19 +37,36 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+const INTRO_SCRIPT = `(function(){var d=document.documentElement;d.classList.add('js');
+try{if(sessionStorage.getItem('gn-intro')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+sessionStorage.setItem('gn-intro','1');d.classList.add('intro-play');
+setTimeout(function(){d.classList.add('intro-done')},2700);}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <script
-          // Ativa as animações de entrada só quando há JavaScript.
-          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+          // Ativa as animações só com JavaScript e decide se a abertura em tela
+          // preta toca: uma vez por sessão e nunca com "reduzir movimento".
+          dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }}
         />
       </head>
       <body>
         <a href="#conteudo" className="skip">
           Pular para o conteúdo
         </a>
+        <div className="intro" aria-hidden="true">
+          <p className="intro__text">
+            <span className="intro__m">
+              <span className="intro__pre">Portfólio de</span>
+            </span>{" "}
+            <span className="intro__m">
+              <span className="intro__name">Gabriel Neumann</span>
+            </span>
+          </p>
+          <span className="intro__line" />
+        </div>
         <Header />
         <div id="conteudo">{children}</div>
         <IndexOverlay />

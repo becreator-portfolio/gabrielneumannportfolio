@@ -3,6 +3,117 @@
    e rodapé.
    ===================================================================== */
 
+/* ---------- Abertura em tela preta ---------------------------------- */
+/* Toca uma vez por sessão (classe .intro-play, definida no <head>).
+   Texto entra por máscara, uma linha marca o tempo, o texto sai pelo
+   topo e a cortina recolhe de baixo para cima, revelando o site. */
+
+.intro {
+  display: none;
+}
+
+.intro-play .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(18px, 2.4vw, 30px);
+  padding: var(--pad);
+  background: #0d0d0c;
+  color: #eeece6;
+  animation: intro-curtain 1.15s 1.7s var(--ease-io) both;
+}
+
+.intro-play:not(.intro-done) body {
+  overflow: hidden;
+}
+
+@keyframes intro-curtain {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+.intro__text {
+  font-family: var(--serif);
+  font-weight: 360;
+  font-size: clamp(26px, 3.2vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.intro__m {
+  display: inline-block;
+  overflow: clip;
+  padding: 0.14em 0.12em 0.16em;
+  margin: -0.14em -0.12em -0.16em;
+  vertical-align: top;
+}
+
+.intro__m > span {
+  display: inline-block;
+  animation:
+    intro-in 1.05s var(--ease) both,
+    intro-out 0.75s var(--ease-io) forwards;
+}
+
+.intro__m:first-child > span {
+  animation-delay: 0.2s, 1.5s;
+}
+
+.intro__m:last-child > span {
+  animation-delay: 0.34s, 1.58s;
+}
+
+.intro__pre {
+  font-style: italic;
+  font-weight: 300;
+  color: rgb(238 236 230 / 0.62);
+}
+
+@keyframes intro-in {
+  from {
+    transform: translate3d(0, 112%, 0);
+  }
+}
+
+@keyframes intro-out {
+  to {
+    transform: translate3d(0, -112%, 0);
+  }
+}
+
+.intro__line {
+  display: block;
+  width: min(200px, 40vw);
+  height: 1px;
+  background: rgb(238 236 230 / 0.4);
+  transform-origin: left;
+  animation:
+    intro-line 1s 0.5s var(--ease-io) both,
+    intro-fade 0.4s 1.5s forwards;
+}
+
+@keyframes intro-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes intro-fade {
+  to {
+    opacity: 0;
+  }
+}
+
 /* ---------- Cabeçalho ------------------------------------------------- */
 
 .header {

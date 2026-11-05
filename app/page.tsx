@@ -1,7 +1,7 @@
 import { Chapter } from "@/components/Chapter";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { Hero, type ReelItem } from "@/components/Hero";
+import { Hero } from "@/components/Hero";
 import { Split } from "@/components/Split";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
@@ -9,27 +9,13 @@ import { site } from "@/content/site";
 const words = (t: string) => t.split(" ").length;
 
 export default function Home() {
-  // Recorte rotativo da abertura: um trabalho de cada linguagem.
-  const pick = (slug: string, media?: (p: (typeof projects)[number]) => ReelItem["media"]): ReelItem => {
-    const i = projects.findIndex((p) => p.slug === slug);
-    const p = projects[i];
-    return { slug, client: p.client, n: String(i + 1).padStart(2, "0"), media: media ? media(p) : p.cover };
-  };
-  const reel: ReelItem[] = [
-    pick("oitta-sushi", (p) => (p.feature.layout === "system" ? p.feature.side : p.cover)),
-    pick("kampeki"),
-    pick("johns-pizza"),
-    pick("inb-burguer"),
-    pick("la-mafia"),
-  ];
-
   // O interlúdio entra entre o primeiro e o segundo bloco de trabalhos.
   const BREAK = 5;
   const total = projects.length;
 
   return (
     <main className="home">
-      <Hero items={reel} statement={site.statement} />
+      <Hero statement={site.statement} />
 
       <section id="trabalhos" className="works" aria-labelledby="trabalhos-title">
         <header className="works__head" data-tone="light">

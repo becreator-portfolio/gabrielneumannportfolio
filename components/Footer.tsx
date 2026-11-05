@@ -19,7 +19,7 @@ export function Footer() {
         <p className="footer__role label mute">{site.role}</p>
       </div>
       <p className="footer__name" aria-hidden="true" data-reveal="split">
-        <Split text="Neumann" by="char" />
+        <Split text="Neumann" />
       </p>
       <div className="footer__row label">
         <span>

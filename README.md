@@ -55,9 +55,14 @@ tudo isso aparece automaticamente.
 
 ## Estrutura da home e interações
 
-1. **Abertura** — o nome funciona como cabeçalho de revista, com um recorte
-   rotativo de trabalhos no centro (pausa no hover/foco e com botão). Ao rolar,
-   o nome se abre e o recorte cresce até tomar a tela.
+1. **Abertura** — na primeira visita da sessão, tela preta com
+   "Portfólio de Gabriel Neumann"; o texto sai pelo topo e a cortina recolhe
+   revelando o site (não toca de novo na mesma aba nem com "reduzir
+   movimento"; controlada pelo script no `<head>` de `app/layout.tsx`).
+   Em seguida, o letreiro: "Gabriel" em Newsreader itálico sobre "NEUMANN"
+   em Archivo condensado, ajustado opticamente à largura da página
+   (`--k-name` em `app/styles/home.css`). O nome anima por palavra, nunca
+   letra a letra, para preservar o kerning.
 2. **Trabalhos** — cada projeto é um capítulo: régua, número, título, resumo e
    uma composição de mídia própria. A cor de fundo acompanha o capítulo em
    leitura (claro/escuro) e o cabeçalho mostra qual é (`03/09 INB Burguer`).

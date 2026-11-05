@@ -46,6 +46,12 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
   --stagger: 38ms;
+  /* atraso das entradas quando a abertura em tela preta toca */
+  --t0: 0ms;
+}
+
+.intro-play {
+  --t0: 1850ms;
 }
 
 :root[data-tone="dark"] {

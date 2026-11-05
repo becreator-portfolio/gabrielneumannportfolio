@@ -61,7 +61,7 @@ export default async function ProjectPage({ params }: Params) {
           <span>{project.category}</span>
         </p>
         <h1 className="phead__title" style={fit(project.client)}>
-          <Split text={project.client} by="char" />
+          <Split text={project.client} />
         </h1>
         <div className="phead__body">
           <dl className="phead__meta">
